@@ -31,7 +31,7 @@ func (s *SlidingWindowLimiter) Allow(key string) bool {
 	filtered := timeStamps[:0]
 
 	for _, ts := range timeStamps {
-		if ts.Sub(windowStart) < s.interval {
+		if ts.After(windowStart) {
 			filtered = append(filtered, ts)
 		}
 	}
