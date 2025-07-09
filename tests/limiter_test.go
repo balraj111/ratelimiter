@@ -1,0 +1,32 @@
+package test
+
+import (
+	"ratelimiter/internal/limiter"
+	"testing"
+	"time"
+)
+
+func TestFixedWindowLimiter(t *testing.T) {
+	limit := 3
+	interval := 2 * time.Second
+
+	r := limiter.NewFixedWindowLimiter(limit, interval)
+	key := "test-user"
+	for i := 0; i < limit; i++ {
+		allowed := r.Allow(key)
+		t.Logf("Attempt %d: allowed = %v, remaining = %d", i+1, allowed, r.GetRemaining(key))
+		if !allowed {
+			t.Fatalf("expected request %d should be allowed", i+1)
+		}
+	}
+
+	if r.Allow(key) {
+		t.Fatalf("expected request should be denied after reaching the request")
+	}
+
+	time.Sleep(6 * time.Second)
+
+	if !r.Allow(key) {
+		t.Fatalf("expected request to be allowed after window reset")
+	}
+}
