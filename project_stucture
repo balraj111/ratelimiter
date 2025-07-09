@@ -1,0 +1,34 @@
+rate-limiter/                 # Root Go module
+├── go.mod
+├── README.md
+
+├── cmd/                      # Executables (e.g., API server, CLI tool)
+│   └── ratelimiterd/         # Main service binary (entry point)
+│       └── main.go
+
+├── internal/                 # Internal implementation (not imported by other modules)
+│   ├── limiter/              # Core rate limiter strategies
+│   │   ├── interface.go          # Common Limiter interface
+│   │   ├── fixed_window.go       # Fixed Window implementation ✅
+│   │   ├── sliding_window.go     # Sliding Window implementation ✅
+│   │   ├── token_bucket.go       # ⏳ (next)
+│   │   ├── leaky_bucket.go       # ⏳
+│   │   ├── concurrent_limiter.go # ⏳
+│   │   ├── adaptive_limiter.go   # ⏳
+│   │   └── factory.go            # Factory to choose limiter type
+│
+│   └── storage/             # Optional backends
+│       ├── memory.go            # In-memory backend (optional)
+│       └── redis.go             # Redis-backed limiter (optional)
+
+├── pkg/                     # Public APIs (if you want to expose this as a library)
+│   └── ratelimiter/
+│       └── ratelimiter.go       # Public interface to internal limiter strategies
+
+├── configs/                 # Optional: YAML or JSON configs
+│   └── default.yaml
+
+├── tests/                   # Unit and integration tests
+│   ├── limiter_test.go          # ✅ Test for FixedWindowLimiter
+│   ├── benchmark_test.go        # ⏳ Add performance tests here
+│   └── integration_test.go      # ⏳ System-level tests
