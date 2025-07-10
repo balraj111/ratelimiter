@@ -1,0 +1,115 @@
+# 🚀 Go Rate Limiter
+
+A production-ready, pluggable rate limiter library written in Go. Supports:
+
+- ✅ Fixed Window
+- ✅ Sliding Window
+- ✅ Token Bucket
+- 🛠️ Easily extensible (Leaky Bucket, Adaptive, Redis-backed)
+
+## 📦 Install
+
+```bash
+go get github.com/balraj111/ratelimiter@latest
+```
+
+## ✨ Features
+- Pluggable limiter strategies
+- Simple interface
+- Thread-safe
+- Easily integrated into HTTP servers (e.g., Gin)
+- Unit tests & benchmarks included
+
+---
+
+## ✅ Example Usage
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/balraj111/ratelimiter/pkg/ratelimiter"
+)
+
+func main() {
+	rl := ratelimiter.New(ratelimiter.Config{
+		Type:     ratelimiter.SlidingWindow,
+		Limit:    5,
+		Interval: 10 * time.Second,
+	})
+
+	for i := 0; i < 7; i++ {
+		if rl.Allow("user123") {
+			fmt.Println("✅ Request allowed")
+		} else {
+			fmt.Println("❌ Rate limit exceeded")
+		}
+		time.Sleep(1 * time.Second)
+	}
+}
+```
+
+---
+
+## 🔧 Available Strategies
+
+```go
+const (
+	ratetoken.FixedWindow   // Based on a fixed time window
+	ratetoken.SlidingWindow // Tracks timestamps in sliding window
+	ratetoken.TokenBucket   // Tokens refilled per second, burstable
+)
+```
+
+---
+
+## 🔌 Integrate with Gin Middleware
+
+```go
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/balraj111/ratelimiter/pkg/ratelimiter"
+)
+
+r := gin.Default()
+rl := ratelimiter.New(ratelimiter.Config{
+	Type:     ratelimiter.TokenBucket,
+	Rate:     2,
+	Burst:    5,
+})
+
+r.Use(func(c *gin.Context) {
+	if !rl.Allow(c.ClientIP()) {
+		c.AbortWithStatusJSON(429, gin.H{"error": "rate limit exceeded"})
+		return
+	}
+	c.Next()
+})
+```
+
+---
+
+## 🧪 Testing & Benchmarks
+```bash
+go test -v ./tests
+
+go test -bench=. ./tests
+```
+
+---
+
+## 📚 Documentation
+Once tagged, view on: https://pkg.go.dev/github.com/balraj111/ratelimiter
+
+---
+
+## 📜 License
+MIT
+
+---
+
+## 🙌 Contributions Welcome
+Want to add Redis, Leaky Bucket, or mTLS support? PRs are welcome!
