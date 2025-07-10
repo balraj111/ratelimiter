@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"ratelimiter/internal/limiter"
 	"time"
+
+	"github.com/balraj111/ratelimiter/internal/limiter"
 
 	"github.com/gin-gonic/gin"
 )

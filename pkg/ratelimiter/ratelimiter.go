@@ -1,6 +1,6 @@
 package ratelimiter
 
-import "ratelimiter/internal/limiter"
+import "github.com/balraj111/ratelimiter/internal/limiter"
 
 type Limiter = limiter.Limiter
 type Config = limiter.LimiterConfig

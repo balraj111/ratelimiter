@@ -1,9 +1,10 @@
 package test
 
 import (
-	"ratelimiter/internal/limiter"
 	"testing"
 	"time"
+
+	"github.com/balraj111/ratelimiter/internal/limiter"
 )
 
 func BenchMarkFixedWindowLimiter(b *testing.B) {
