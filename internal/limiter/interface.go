@@ -1,8 +1,7 @@
 package limiter
 
-type limiter interface {
+type Limiter interface {
 	Allow(key string) bool
 	GetRemaining(key string) int
-	reset(key string)
+	Reset(key string)
 }
-
